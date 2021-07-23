@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Car;
 
 class CarController extends Controller
 {
@@ -11,9 +12,22 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+
+        $query = Car::with('category');
+
+        if($request->get('brand')) {
+            $query = $query->where('brand', $request->get('brand'));
+        }
+
+        if($request->get('asc')) {
+            $query = $query->sortBy('brand', 'asc');
+        }
+
+
+        return response()->json($query->paginate(10));
     }
 
     /**
@@ -24,7 +38,18 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newCar = new Car();
+
+        $newCar->registration_license = $request->input('registration_license');
+        $newCar->brand = $request->input('brand');
+        $newCar->model = $request->input('model');
+        $newCar->manufacture_date = $request->input('manufacture_date');
+        $newCar->description = $request->input('description');
+        $newCar->category_id = $request->input('category_id');
+        $newCar->properties = $request->input('properties');
+
+        $newCar->save();
+        return response()->json($newCar);
     }
 
     /**
@@ -35,7 +60,8 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        //
+        $car = Car::find($id);
+        return response()->json($car);
     }
 
     /**
@@ -47,7 +73,17 @@ class CarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $car = Car::find($id);
+        $car->registration_license = $request->input('registration_license');
+        $car->brand = $request->input('brand');
+        $car->model = $request->input('model');
+        $car->manufacture_date = $request->input('manufacture_date');
+        $car->description = $request->input('description');
+        $car->category_id = $request->input('category_id');
+        $car->properties = $request->input('properties');
+
+        $car->save();
+        return response()->json($car);
     }
 
     /**
@@ -56,8 +92,10 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $car = Car::find($id);
+        $car->delete();
+        return response()->json($car);
     }
 }

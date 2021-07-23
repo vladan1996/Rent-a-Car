@@ -9,14 +9,17 @@ class Car extends Model
 {
     use HasFactory;
 
-    protected $table = 'students';
     protected $fillable = [
         'registration_license',
         'brand',
         'model',
-        'manufature_date',
+        'manufacture_date',
         'description',
         'category_id',
         'properties'
     ];
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }
