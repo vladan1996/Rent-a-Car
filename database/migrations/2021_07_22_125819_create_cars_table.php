@@ -22,6 +22,7 @@ class CreateCarsTable extends Migration
             $table->text('description')->nullable();
             $table->bigInteger('category_id')->unsigned();
             $table->json('properties');
+            $table->string('slug');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });

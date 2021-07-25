@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Models\Car;
+
 
 class CarController extends Controller
 {
@@ -14,7 +16,6 @@ class CarController extends Controller
      */
     public function index(Request $request)
     {
-
 
         $query = Car::with('category');
 
