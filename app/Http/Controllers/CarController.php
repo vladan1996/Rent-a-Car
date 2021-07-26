@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Models\Car;
@@ -27,9 +28,19 @@ class CarController extends Controller
             $query = $query->sortBy('brand', 'asc');
         }
 
-
+        if($request->get('model')){
+            $query->where('model','like' ,'%'.$request->get('model').'%');
+        }
+        if($request->get('brand')){
+            $query->where('brand','like' ,'%'.$request->get('brand').'%');
+        }
+        if($request->get('price')){
+           $query->where('price','<=' ,'%'.$request->get('price').'%');
+            return response()->json(Category::with('cars')->get());
+        }
         return response()->json($query->paginate(10));
     }
+
 
     /**
      * Store a newly created resource in storage.
