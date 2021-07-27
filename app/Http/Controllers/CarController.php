@@ -34,9 +34,11 @@ class CarController extends Controller
         if($request->get('brand')){
             $query->where('brand','like' ,'%'.$request->get('brand').'%');
         }
-        if($request->get('price')){
-           $query->where('price','<=' ,'%'.$request->get('price').'%');
-            return response()->json(Category::with('cars')->get());
+
+        if($sort=$request->input('sort')){
+            if ($colum=$request->input('colum')) {
+                $query->orderBy("$colum", $sort);
+            }
         }
         return response()->json($query->paginate(10));
     }
