@@ -27,6 +27,8 @@ Route::post('/cars',[CarController::class,'store']);
 Route::get('/cars/{id}',[CarController::class,'show']);
 Route::put('/carsupdate/{id}',[CarController::class,'update']);
 Route::delete('/carsdelete/{id}',[CarController::class,'destroy']);
+Route::get('/money',[CarController::class,'money']);
+Route::get('/convertCurrency',[CarController::class,'convertCurrency']);
 
 
 //Category CRUD

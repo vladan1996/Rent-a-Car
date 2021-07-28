@@ -6,6 +6,8 @@ use App\Models\Category;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 use App\Models\Car;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\DB;
 
 
 class CarController extends Controller
@@ -43,6 +45,36 @@ class CarController extends Controller
         return response()->json($query->paginate(10));
     }
 
+
+
+    public function money(Request $request){
+
+        $amount = Category::select('price')->where('id',1)->get();
+        $toCurrency = $request->input('tocurrency');
+
+        try {
+            $client = new Client([
+                'base_uri' => 'http://data.fixer.io/api/',
+            ]);
+
+            $response = $client->request('GET', 'latest', [
+                'query' => [
+                    'access_key' => '6a1a571d3b6b4c6a2a7e22d5c1d1be43',
+                    'symbols' => "$toCurrency",
+                ]
+            ]);
+            if ($response->getStatusCode() == 200) {
+                $body = $response->getBody();
+                $arr_body = json_decode($body);
+                $value = $arr_body->rates->$toCurrency;
+                $newAmount = $amount[0]['price'];
+                $changed = $value * $newAmount;
+                return response()->json($changed);
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
