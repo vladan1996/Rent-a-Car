@@ -17,6 +17,8 @@ class CategoryController extends Controller
         return response()->json(Category::with('cars')->get());
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *

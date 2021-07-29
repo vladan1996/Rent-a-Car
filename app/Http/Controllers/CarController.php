@@ -42,10 +42,9 @@ class CarController extends Controller
                 $query->orderBy("$colum", $sort);
             }
         }
+
         return response()->json($query->paginate(10));
     }
-
-
 
     public function money(Request $request){
 
@@ -72,6 +71,7 @@ class CarController extends Controller
                 return response()->json($changed);
             }
         } catch (Exception $e) {
+            return response()->json($e, 400);
             echo $e->getMessage();
         }
     }
